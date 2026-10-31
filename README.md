@@ -1,1 +1,1 @@
-[# portfolio](https://daniilsil.github.io/portfolio/)G
+[# portfolio](https://daniilsil.github.io/portfolio/)
