@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python & Telegram Bot Developer | Портфолио</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#090d16',
+                        cardBg: '#111827',
+                        accentGreen: '#10b981',
+                        accentCyan: '#06b6d4',
+                        accentBlue: '#3b82f6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
+        }
+        .glow-text {
+            text-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+        }
+        /* Стилизация скроллбара */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-200 antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Фоновые декоративные свечения -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-[130px]"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-blue-600/10 rounded-full blur-[140px]"></div>
+    </div>
+
+    <!-- Всплывающее уведомление (Toast) -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 px-5 py-3.5 rounded-xl bg-slate-900 border border-emerald-500/50 shadow-2xl text-white">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-sm font-medium">Успешно!</span>
+    </div>
+
+    <!-- Навигация -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-darkBg/80 border-b border-white/5 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Логотип -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-[1.5px] transition-transform group-hover:scale-105">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <span class="code-font font-bold text-emerald-400">&gt;_</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold tracking-tight text-white group-hover:text-emerald-400 transition-colors">DEV.STUDIO</span>
+                    <span class="text-[10px] code-font text-slate-400">PYTHON & TELEGRAM BOTS</span>
+                </div>
+            </a>
+
+            <!-- Десктопное меню -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#services" class="hover:text-emerald-400 transition-colors">Услуги</a>
+                <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Кейсы</a>
+                <a href="#calculator" class="hover:text-emerald-400 transition-colors">Калькулятор</a>
+                <a href="#contact" class="hover:text-emerald-400 transition-colors">Контакты</a>
+            </nav>
+
+            <!-- Статус и Кнопка связи -->
+            <div class="flex items-center gap-4">
+                <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-medium text-emerald-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 -ml-4"></span>
+                    Доступен для заказов
+                </div>
+                <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs tracking-wide transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    Обсудить проект
+                </a>
+                <!-- Мобильная кнопка меню -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white" aria-label="Открыть меню">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Мобильное меню (выпадающее) -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-6 bg-slate-900 border-b border-white/10 space-y-3">
+            <a href="#services" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-emerald-400 text-sm font-medium">Услуги</a>
+            <a href="#portfolio" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-emerald-400 text-sm font-medium">Кейсы</a>
+            <a href="#calculator" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-emerald-400 text-sm font-medium">Калькулятор</a>
+            <a href="#contact" class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-emerald-400 text-sm font-medium">Контакты</a>
+            <a href="https://t.me/your_telegram_handle" target="_blank" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-semibold text-xs">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                Написать в Telegram
+            </a>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="relative z-10">
+
+        <!-- Hero Секция -->
+        <section class="pt-16 pb-20 md:pt-28 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Текстовый блок слева -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs font-medium text-emerald-400">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                        Чистый асинхронный Python & Быстрый запуск
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
+                        Разработка <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 glow-text">Telegram-ботов</span>, парсеров и веб-скриптов
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
+                        Автоматизирую рутину, создаю интерактивных ботов под каналы и бизнес, настраиваю надежный сбор данных и интеграции. Без конструкторов, на чистом коде с гарантией стабильной работы 24/7.
+                    </p>
+
+                    <!-- Преимущества в цифрах -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-white code-font">24-48 ч</div>
+                            <div class="text-xs text-slate-400 mt-1">Первый прототип</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 code-font">100%</div>
+                            <div class="text-xs text-slate-400 mt-1">Автономность решений</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 code-font">aiogram 3</div>
+                            <div class="text-xs text-slate-400 mt-1">Современный стек</div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопки действий -->
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="#calculator" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-semibold text-sm transition-all shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                            Рассчитать стоимость
+                        </a>
+                        <a href="#portfolio" class="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-white font-medium text-sm transition-all flex items-center gap-2">
+                            <i data-lucide="folder-code" class="w-4 h-4"></i>
+                            Смотреть кейсы
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Интерактивная терминал-карточка справа -->
+                <div class="lg:col-span-5">
+                    <div class="rounded-2xl bg-slate-950/90 border border-slate-800 shadow-2xl p-5 relative overflow-hidden group">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                            </div>
+                            <span class="text-xs text-slate-400 code-font">bot_engine.py</span>
+                        </div>
+                        <div class="mt-4 space-y-2 text-xs sm:text-sm code-font text-slate-300">
+                            <p><span class="text-purple-400">from</span> aiogram <span class="text-purple-400">import</span> Bot, Dispatcher</p>
+                            <p><span class="text-purple-400">from</span> aiogram.types <span class="text-purple-400">import</span> Message</p>
+                            <p><span class="text-purple-400">import</span> asyncio, logging</p>
+                            <p class="text-slate-400 pt-2"># Инициализация надежного асинхронного сервиса</p>
+                            <p><span class="text-cyan-400">dp</span> = Dispatcher()</p>
+                            <p><span class="text-yellow-400">@dp.message()</span></p>
+                            <p><span class="text-purple-400">async def</span> <span class="text-blue-400">handle_request</span>(message: Message):</p>
+                            <p class="pl-4 text-emerald-400"><span class="text-purple-400">await</span> message.answer(<span class="text-slate-200">"🚀 Задача принята в работу 24/7!"</span>)</p>
+                            <p class="text-slate-400 pt-2"># Статус сервера:</p>
+                            <div class="p-3 mt-2 rounded-lg bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <i data-lucide="shield-check" class="w-4 h-4"></i> Polling Active
+                                </span>
+                                <span class="text-[11px] bg-emerald-500/20 px-2 py-0.5 rounded">0 errors / 60 FPS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Стек технологий (Tech Stack Chips) -->
+        <section class="py-12 border-y border-white/5 bg-slate-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 text-center mb-6">Технологический стек разработки</p>
+                <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="file-code" class="w-4 h-4 text-emerald-400"></i> Python 3.11+
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="bot" class="w-4 h-4 text-cyan-400"></i> aiogram 3.x
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i> Asyncio & Aiohttp
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="database" class="w-4 h-4 text-amber-400"></i> SQLite / PostgreSQL
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="globe" class="w-4 h-4 text-blue-400"></i> BeautifulSoup / Selenium
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-rose-400"></i> OpenAI / LLM API
+                    </span>
+                    <span class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 hover:border-emerald-500/50 transition-colors">
+                        <i data-lucide="layout" class="w-4 h-4 text-emerald-400"></i> HTML5 / JS / Tailwind
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Услуги -->
+        <section id="services" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">Направления работы</h2>
+                <h3 class="text-3xl font-extrabold text-white">Решаю задачи бизнеса через код</h3>
+                <p class="text-slate-400 text-sm mt-3">От простых чат-ботов до комплексных систем сбора аналитики и интеграции заявок.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Услуга 1 -->
+                <div class="glass-card glass-card-hover p-7 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6">
+                            <i data-lucide="bot" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">Telegram-боты любой сложности</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Боты для каналов, приём заказов, закрытые платные клубы по подписке, автоматическая модерация, интерактивные викторины и конкурсы.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-300">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Приём оплат (ЮKassa, СБП, Stars)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Базы данных и админ-панели</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Защита от накруток и мультиаккаунтов</li>
+                        </ul>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">Сроки: от 1-2 дней</span>
+                        <span class="font-bold text-emerald-400">от 5 000 ₽</span>
+                    </div>
+                </div>
+
+                <!-- Услуга 2 -->
+                <div class="glass-card glass-card-hover p-7 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6">
+                            <i data-lucide="search" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">Парсеры и сбор данных</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Автоматическая выгрузка каталогов, товаров, цен конкурентов, контактов и объявлений в Excel, Google Таблицы или Telegram-канал.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-300">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i> Обход базовой защиты и пагинации</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i> Экспорт в удобные форматы (CSV/XLSX)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i> Круглосуточный мониторинг цен</li>
+                        </ul>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">Сроки: 1-3 дня</span>
+                        <span class="font-bold text-cyan-400">от 4 000 ₽</span>
+                    </div>
+                </div>
+
+                <!-- Услуга 3 -->
+                <div class="glass-card glass-card-hover p-7 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">Веб-скрипты и доработки сайтов</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Настройка форм захвата заявок с отправкой в Telegram, починка сбоев в коде, разработка пользовательских скриптов (Tampermonkey).
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-300">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400"></i> Моментальные уведомления о заявках в TG</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400"></i> Исправление JavaScript ошибок и вёрстки</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400"></i> Автоматизация действий в браузере</li>
+                        </ul>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">Сроки: от нескольких часов</span>
+                        <span class="font-bold text-blue-400">от 2 000 ₽</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Портфолио / Кейсы с фильтрацией -->
+        <section id="portfolio" class="py-20 bg-slate-900/30 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">Портфолио проектов</h2>
+                        <h3 class="text-3xl font-extrabold text-white">Реализованные решения</h3>
+                    </div>
+                    <!-- Вкладки фильтров -->
+                    <div class="flex flex-wrap gap-2 mt-6 md:mt-0" id="filter-tabs">
+                        <button onclick="filterPortfolio('all')" class="portfolio-tab active px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-slate-950 transition-all">Все</button>
+                        <button onclick="filterPortfolio('bots')" class="portfolio-tab px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all">Telegram-боты</button>
+                        <button onclick="filterPortfolio('parsers')" class="portfolio-tab px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all">Парсеры и скрипты</button>
+                        <button onclick="filterPortfolio('web')" class="portfolio-tab px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all">Веб-решения</button>
+                    </div>
+                </div>
+
+                <!-- Сетка кейсов -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
+                    
+                    <!-- Кейс 1: Конкурсный бот -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="bots">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Telegram Bot</span>
+                                <span class="text-xs text-slate-400 code-font">aiogram 3 + SQLite</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Конкурсный бот с мульти-победителями</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Автоматизация розыгрышей в канале: обязательная проверка подписки на спонсоров, защита от накруток ботами, генерация случайных победителей и экспорт статистики.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">SQLite</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Channel Guard</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Рандомайзер</span>
+                            </div>
+                            <div class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Успешно запущен в канале на 15k+ подписчиков
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кейс 2: Интерактивный бот сказок -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="bots">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">AI & Bots</span>
+                                <span class="text-xs text-slate-400 code-font">@Baby_fairytale_bot</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Интерактивный бот детских сказок</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Бот интерактивных историй с возможностью выбора развития сюжета ребенком. Генерация персональных сказок, сохранение прогресса чтения и озвучка персонажей.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ветвление сюжетов</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">OpenAI API</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">FSM стейты</span>
+                            </div>
+                            <div class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Доступен в Telegram
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кейс 3: Парсер данных -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="parsers">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Парсинг</span>
+                                <span class="text-xs text-slate-400 code-font">Python + Pandas</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Автопарсер объявлений и цен</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Многопоточный сбор объявлений с защищенных порталов: фильтрация дубликатов, автоматическая очистка номеров телефонов и выгрузка отчёта в структурированный Excel.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ротация User-Agent</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">OpenPyXL</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Anti-Captcha</span>
+                            </div>
+                            <div class="text-xs text-cyan-400 font-medium flex items-center gap-1">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i> 10 000+ карточек собираются за 12 минут
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кейс 4: Браузерный скрипт автоматизации -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="parsers">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">Автоматизация</span>
+                                <span class="text-xs text-slate-400 code-font">JavaScript / Tampermonkey</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Скрипт пропуска рекламы и таймеров</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Клиентский скрипт для видеохостингов: автоопределение рекламных оверлеев через MutationObserver, переключение плеера без ожидания и сохранение настроек громкости.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">DOM Observer</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Tampermonkey</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Zero Lag</span>
+                            </div>
+                            <div class="text-xs text-purple-400 font-medium flex items-center gap-1">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> 100% стабильный пропуск без багов
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кейс 5: Интеграция веб-форм -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="web">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">Веб-интеграция</span>
+                                <span class="text-xs text-slate-400 code-font">PHP / Python Webhook</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Ремонт лид-форм с дублированием в TG</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Устранение ошибок валидации и отправки на коммерческом сайте услуг (Dnbalkon): моментальная доставка заявок менеджеру в Telegram с именем, телефоном и UTM-метками.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Telegram Bot API</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">AJAX без перезагрузки</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">UTM-трекинг</span>
+                            </div>
+                            <div class="text-xs text-blue-400 font-medium flex items-center gap-1">
+                                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Доставка лида клиенту за 1.2 секунды
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кейс 6: Быстрый коммерческий сайт -->
+                    <div class="portfolio-card glass-card p-6 rounded-2xl flex flex-col justify-between" data-category="web">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">Landing Page</span>
+                                <span class="text-xs text-slate-400 code-font">HTML5 + Tailwind CSS</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Высококонверсионный сайт услуг</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Разработка первой версии коммерческого сайта под ключ: оптимизация скорости (95+ в Google PageSpeed), адаптив под мобильные устройства и SEO-разметка.
+                            </p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Mobile-First</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">SEO-разметка</span>
+                                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Быстрая загрузка</span>
+                            </div>
+                            <div class="text-xs text-blue-400 font-medium flex items-center gap-1">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Сдан в срок за 3 дня
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Интерактивный калькулятор стоимости проекта -->
+        <section id="calculator" class="py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">Прозрачный расчет</h2>
+                <h3 class="text-3xl font-extrabold text-white">Калькулятор стоимости и сроков</h3>
+                <p class="text-slate-400 text-sm mt-2">Выберите тип задачи и требуемые опции для предварительной оценки бюджета.</p>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl">
+                <!-- Шаг 1: Тип проекта -->
+                <div class="mb-8">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">1. Основной тип проекта</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="calc-types">
+                        
+                        <label class="cursor-pointer relative flex flex-col p-4 rounded-xl border border-emerald-500/60 bg-emerald-950/20 text-white transition-all calc-type-card" data-price="5000" data-days="2" data-name="Telegram-бот">
+                            <input type="radio" name="project_type" value="bot" checked class="hidden">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="bot" class="w-5 h-5 text-emerald-400"></i>
+                                <span class="text-xs text-emerald-400 font-bold">от 5 000 ₽</span>
+                            </div>
+                            <span class="text-sm font-semibold">Telegram-бот</span>
+                            <span class="text-[11px] text-slate-400 mt-1">aiogram 3, диалоги, меню</span>
+                        </label>
+
+                        <label class="cursor-pointer relative flex flex-col p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition-all calc-type-card" data-price="4000" data-days="2" data-name="Парсер данных">
+                            <input type="radio" name="project_type" value="parser" class="hidden">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="file-spreadsheet" class="w-5 h-5 text-cyan-400"></i>
+                                <span class="text-xs text-cyan-400 font-bold">от 4 000 ₽</span>
+                            </div>
+                            <span class="text-sm font-semibold">Парсер данных</span>
+                            <span class="text-[11px] text-slate-400 mt-1">Сбор в Excel / Google Таблицы</span>
+                        </label>
+
+                        <label class="cursor-pointer relative flex flex-col p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition-all calc-type-card" data-price="3000" data-days="1" data-name="Автоматизация / Скрипт">
+                            <input type="radio" name="project_type" value="script" class="hidden">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="code" class="w-5 h-5 text-purple-400"></i>
+                                <span class="text-xs text-purple-400 font-bold">от 3 000 ₽</span>
+                            </div>
+                            <span class="text-sm font-semibold">Скрипт / Браузер</span>
+                            <span class="text-[11px] text-slate-400 mt-1">Автокликеры, расширения</span>
+                        </label>
+
+                        <label class="cursor-pointer relative flex flex-col p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition-all calc-type-card" data-price="6000" data-days="3" data-name="Сайт / Форма заявок">
+                            <input type="radio" name="project_type" value="web" class="hidden">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i>
+                                <span class="text-xs text-blue-400 font-bold">от 6 000 ₽</span>
+                            </div>
+                            <span class="text-sm font-semibold">Сайт под ключ</span>
+                            <span class="text-[11px] text-slate-400 mt-1">Адаптивный лендинг с TG-формой</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Шаг 2: Дополнительные опции -->
+                <div class="mb-8">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">2. Необходимые модули и функции</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="calc-options">
+                        
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/40 cursor-pointer transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-950 border-slate-700 calc-addon" data-price="2000" data-days="1" data-label="База данных (SQLite/PostgreSQL)">
+                                <span class="text-xs sm:text-sm text-slate-200">База данных (SQLite / PostgreSQL)</span>
+                            </div>
+                            <span class="text-xs code-font text-emerald-400">+2 000 ₽</span>
+                        </label>
+
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/40 cursor-pointer transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-950 border-slate-700 calc-addon" data-price="3500" data-days="1" data-label="Приём платежей (ЮKassa / Cards / Stars)">
+                                <span class="text-xs sm:text-sm text-slate-200">Приём платежей (ЮKassa / Cards / Stars)</span>
+                            </div>
+                            <span class="text-xs code-font text-emerald-400">+3 500 ₽</span>
+                        </label>
+
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/40 cursor-pointer transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-950 border-slate-700 calc-addon" data-price="3000" data-days="1" data-label="Интеграция с OpenAI / AI">
+                                <span class="text-xs sm:text-sm text-slate-200">Интеграция искусственного интеллекта (LLM / GPT)</span>
+                            </div>
+                            <span class="text-xs code-font text-emerald-400">+3 000 ₽</span>
+                        </label>
+
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/40 cursor-pointer transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="w-4 h-4 rounded text-emerald-500 focus:ring-0 bg-slate-950 border-slate-700 calc-addon" data-price="1500" data-days="0" data-label="Деплой и настройка 24/7 сервера">
+                                <span class="text-xs sm:text-sm text-slate-200">Деплой и запуск на Linux-сервере (VPS)</span>
+                            </div>
+                            <span class="text-xs code-font text-emerald-400">+1 500 ₽</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Итог калькулятора -->
+                <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div class="space-y-1 text-center sm:text-left">
+                        <div class="text-xs text-slate-400 uppercase tracking-wider">Ориентировочная оценка:</div>
+                        <div class="flex items-baseline gap-3">
+                            <span id="calc-total-price" class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 code-font">5 000 ₽</span>
+                            <span id="calc-total-days" class="text-sm font-medium text-slate-400">~ 2 дня</span>
+                        </div>
+                    </div>
+                    <button onclick="applyCalculationToForm()" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-2">
+                        <span>Заказать этот состав</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты и Форма заявки -->
+        <section id="contact" class="py-20 border-t border-white/5 bg-slate-950/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <!-- Информация слева -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-emerald-400">Связь со мной</h2>
+                        <h3 class="text-3xl font-extrabold text-white">Обсудим вашу задачу?</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Опишите задачу в свободной форме или прикрепите ТЗ. Отвечаю в течение 15–30 минут, сразу подскажу реализуемость и точную смету.
+                        </p>
+
+                        <!-- Прямые контакты -->
+                        <div class="space-y-3 pt-4">
+                            <!-- Telegram -->
+                            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                                        <i data-lucide="send" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-400">Telegram для быстрой связи:</div>
+                                        <div class="text-sm font-semibold text-white code-font">@your_telegram_handle</div>
+                                    </div>
+                                </div>
+                                <button onclick="copyToClipboard('@your_telegram_handle')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Скопировать логин">
+                                    <i data-lucide="copy" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <!-- Быстрый переход в чат -->
+                            <a href="https://t.me/your_telegram_handle" target="_blank" class="w-full flex items-center justify-center gap-2 p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800/80 border border-slate-800 text-cyan-400 hover:text-cyan-300 text-xs font-semibold transition-all">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                Открыть чат в приложении Telegram
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Форма заявки справа -->
+                    <div class="lg:col-span-7">
+                        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl">
+                            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Ваше имя</label>
+                                        <input type="text" id="form-name" required placeholder="Александр" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Telegram / Контакт для связи</label>
+                                        <input type="text" id="form-contact" required placeholder="@username или +7..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-2">Описание проекта или ссылка на ТЗ</label>
+                                    <textarea id="form-message" rows="4" required placeholder="Опишите, какого бота или скрипт требуется разработать..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 transition-colors"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.99] flex items-center justify-center gap-2">
+                                    <i data-lucide="send" class="w-4 h-4"></i>
+                                    <span>Отправить заявку</span>
+                                </button>
+                                
+                                <p class="text-[11px] text-slate-500 text-center">
+                                    Нажимая кнопку, вы подтверждаете готовность к обсуждению технического задания.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Футер -->
+    <footer class="py-8 border-t border-slate-800/80 bg-slate-950 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="code-font font-bold text-slate-400">&gt;_ DEV.PORTFOLIO</span>
+                <span>© 2026. Разработка Telegram-ботов и веб-автоматизации.</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#services" class="hover:text-slate-300 transition-colors">Услуги</a>
+                <a href="#portfolio" class="hover:text-slate-300 transition-colors">Кейсы</a>
+                <a href="#calculator" class="hover:text-slate-300 transition-colors">Калькулятор</a>
+                <a href="https://t.me/your_telegram_handle" target="_blank" class="text-emerald-400 hover:underline">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты взаимодействия -->
+    <script>
+        // Инициализация Lucide иконок
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initCalculator();
+        });
+
+        // Мобильное меню
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Фильтрация кейсов в портфолио
+        function filterPortfolio(category) {
+            const tabs = document.querySelectorAll('.portfolio-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-emerald-500', 'text-slate-950');
+                tab.classList.add('bg-slate-800', 'text-slate-300');
+            });
+
+            // Находим нажатую кнопку и делаем активной
+            event.currentTarget.classList.remove('bg-slate-800', 'text-slate-300');
+            event.currentTarget.classList.add('bg-emerald-500', 'text-slate-950');
+
+            const cards = document.querySelectorAll('.portfolio-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Логика интерактивного калькулятора
+        function initCalculator() {
+            const typeCards = document.querySelectorAll('.calc-type-card');
+            const addons = document.querySelectorAll('.calc-addon');
+
+            typeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    typeCards.forEach(c => {
+                        c.classList.remove('border-emerald-500/60', 'bg-emerald-950/20');
+                        c.classList.add('border-slate-800', 'bg-slate-900/60');
+                    });
+                    card.classList.add('border-emerald-500/60', 'bg-emerald-950/20');
+                    card.classList.remove('border-slate-800', 'bg-slate-900/60');
+                    const radio = card.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    recalcTotal();
+                });
+            });
+
+            addons.forEach(checkbox => {
+                checkbox.addEventListener('change', recalcTotal);
+            });
+
+            recalcTotal();
+        }
+
+        function recalcTotal() {
+            let total = 0;
+            let days = 1;
+
+            const selectedType = document.querySelector('input[name="project_type"]:checked').closest('.calc-type-card');
+            if (selectedType) {
+                total += parseInt(selectedType.dataset.price);
+                days += parseInt(selectedType.dataset.days);
+            }
+
+            const addons = document.querySelectorAll('.calc-addon:checked');
+            addons.forEach(ad => {
+                total += parseInt(ad.dataset.price);
+                days += parseInt(ad.dataset.days);
+            });
+
+            document.getElementById('calc-total-price').innerText = total.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('calc-total-days').innerText = `~ ${days} ${days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'}`;
+        }
+
+        // Перенос данных из калькулятора в текстовое поле формы заявки
+        function applyCalculationToForm() {
+            const selectedType = document.querySelector('input[name="project_type"]:checked').closest('.calc-type-card');
+            const typeName = selectedType.dataset.name;
+            const addons = document.querySelectorAll('.calc-addon:checked');
+            
+            let addonList = [];
+            addons.forEach(ad => addonList.push(ad.dataset.label));
+
+            const total = document.getElementById('calc-total-price').innerText;
+            const days = document.getElementById('calc-total-days').innerText;
+
+            let message = `Здравствуйте! Интересует проект: ${typeName}.\n`;
+            if (addonList.length > 0) {
+                message += `Дополнительные модули: ${addonList.join(', ')}.\n`;
+            }
+            message += `Ориентир по калькулятору: ${total} (${days}).\n\nДетали задачи: `;
+
+            const textarea = document.getElementById('form-message');
+            textarea.value = message;
+
+            // Скролл к форме
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            textarea.focus();
+            showToast('Параметры калькулятора добавлены в форму!');
+        }
+
+        // Копирование в буфер обмена
+        function copyToClipboard(text) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast('Telegram username скопирован!');
+        }
+
+        // Обработка отправки формы
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const contact = document.getElementById('form-contact').value;
+            const message = document.getElementById('form-message').value;
+
+            // Имитация успешной отправки
+            showToast('Заявка отправлена! Свяжусь с вами в ближайшее время.');
+            event.target.reset();
+        }
+
+        // Всплывающие уведомления (Toast)
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.innerText = message;
+
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
